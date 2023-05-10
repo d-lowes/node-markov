@@ -2,9 +2,7 @@
 
 /** Textual markov chain generator. */
 
-
 class MarkovMachine {
-
   /** Build markov machine; read in text.*/
 
   constructor(text) {
@@ -13,6 +11,7 @@ class MarkovMachine {
     this.words = text.split(/[ \r\n]+/);
     this.chains = this.getChains();
   }
+
 
   /** Get markov chain: returns object of Markov chains.
    *
@@ -32,13 +31,13 @@ class MarkovMachine {
     let chains = {};
 
     for (let i = 0; i < this.words.length; i++) {
-      let current = this.words[i];
-      let next = this.words[i + 1] || null;
+      let currentWord = this.words[i];
+      let nextWord = this.words[i + 1] || null;
 
-      if (chains[current]) {
-        chains[current].push(next);
+      if (chains[currentWord]) {
+        chains[currentWord].push(nextWord);
       } else {
-        chains[current] = [next];
+        chains[currentWord] = [nextWord];
       }
     }
 
@@ -47,7 +46,8 @@ class MarkovMachine {
 
 
   /** Return random text from chains, starting at the first word and continuing
-   *  until it hits a null choice. */
+   *  until it hits a null choice.
+   * */
 
   getText() {
     // TODO: implement this!
@@ -56,26 +56,27 @@ class MarkovMachine {
     // - find a random word from the following-words of that
     // - repeat until reaching the terminal null
 
-    const chains = this.chains;
-
-    let randomText = `${this.words[0]} `;
+    let randomText = [this.words[0]];
     let currentWord = this.words[0];
 
-    console.log("current word =", currentWord);
-    console.log("word array =", this.words);
+    // console.log("current word =", currentWord);
+    // console.log("word array =", this.words);
 
     while (currentWord != null) {
-      currentWord = MarkovMachine.randomWord(chains[currentWord])
+      currentWord = MarkovMachine.randomWord(this.chains[currentWord])
 
       if (currentWord != null) {
-        randomText += `${currentWord} `;
+        randomText.push(currentWord);
       }
     }
 
-    console.log("random text =", randomText);
-    return randomText.slice(0, -1);
+    // console.log("random text =", randomText);
+    return randomText.join(" ");
   }
+
+
   /** Return a random word from the array of words */
+
   static randomWord(words) {
     return words[Math.floor(Math.random() * words.length)];
   }
